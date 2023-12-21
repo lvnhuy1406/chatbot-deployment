@@ -36,16 +36,19 @@
       ],
       "responses": [
         "Mỗi Shop của hệ thống chúng tôi có thể bán nhiều loại hàng khác nhau"
+        "Chúng tôi bán những thứ pháp luật cho phép."
       ]
     },
     {
       "tag": "payments",
       "patterns": [
         "Có những phương thức thanh toán nào?",
-        "Có thể sử dụng VNPay không?"
+        "Có thể sử dụng VNPay không?",
+        "Có thể sử dụng MoMo không?"
       ],
       "responses": [
-        "Chúng tôi chấp nhận thanh toán COD và VNPay"
+        "Chúng tôi chấp nhận thanh toán COD và VNPay",
+        "Xin lỗi, hiện tại chúng tôi chưa tích hợp thanh toán MoMo"
       ]
     },
     {
