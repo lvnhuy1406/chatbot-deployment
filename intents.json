@@ -4,14 +4,14 @@
       "tag": "greeting",
       "patterns": [
         "Xin chào",
-        "Is anyone there?",
-        "Hello",
-        "Good day"
+        "Chào bạn!",
+        "Chào DevShop!"
       ],
       "responses": [
         "Hey :-)",
         "Xin chào, tôi có thể giúp gì cho bạn?",
-        "Chào bạn!"
+        "Chào bạn!",
+        "Chào mừng bạn đến với DevShop, tôi có thể giúp gì cho bạn?"
       ]
     },
     {
@@ -26,7 +26,7 @@
     {
       "tag": "thanks",
       "patterns": ["Cảm ơn", "Cảm ơn nhiều"],
-      "responses": ["Happy to help!", "Any time!", "My pleasure"]
+      "responses": ["Không có gì, chúng bạn một buổi mua sắm vui vẻ!", "Nếu có bất kì vấn đề gì, hãy liên hệ chúng tôi!"]
     },
     {
       "tag": "items",
@@ -36,7 +36,8 @@
       ],
       "responses": [
         "Mỗi Shop của hệ thống chúng tôi có thể bán nhiều loại hàng khác nhau",
-        "Chúng tôi bán những thứ pháp luật cho phép."
+        "Chúng tôi bạn tất cả mặt hàng với giá ưu đãi hàng đầu"
+
       ]
     },
     {
