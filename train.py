@@ -1,20 +1,26 @@
 import numpy as np
 import random
 import json
-
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
-
-from nltk_utils import bag_of_words, tokenize, stem
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.stem import SnowballStemmer
+from unidecode import unidecode
 from model import NeuralNet
+from nltk_utils import bag_of_words
 
-with open('intents.json', 'r') as f:
+nltk.download('punkt')
+
+with open('intents.json', 'r', encoding='utf-8') as f:
     intents = json.load(f)
 
 all_words = []
 tags = []
 xy = []
+stemmer = SnowballStemmer("english")
+
 # loop through each sentence in our intents patterns
 for intent in intents['intents']:
     tag = intent['tag']
@@ -22,15 +28,17 @@ for intent in intents['intents']:
     tags.append(tag)
     for pattern in intent['patterns']:
         # tokenize each word in the sentence
-        w = tokenize(pattern)
+        words = word_tokenize(pattern)
+        # convert Unicode characters to ASCII
+        words = [unidecode(w).lower() for w in words]
         # add to our words list
-        all_words.extend(w)
+        all_words.extend(words)
         # add to xy pair
-        xy.append((w, tag))
+        xy.append((words, tag))
 
 # stem and lower each word
 ignore_words = ['?', '.', '!']
-all_words = [stem(w) for w in all_words if w not in ignore_words]
+all_words = [stemmer.stem(w) for w in all_words if w not in ignore_words]
 # remove duplicates and sort
 all_words = sorted(set(all_words))
 tags = sorted(set(tags))
@@ -53,7 +61,7 @@ for (pattern_sentence, tag) in xy:
 X_train = np.array(X_train)
 y_train = np.array(y_train)
 
-# Hyper-parameters 
+# Hyper-parameters
 num_epochs = 1000
 batch_size = 8
 learning_rate = 0.001
@@ -96,31 +104,30 @@ for epoch in range(num_epochs):
     for (words, labels) in train_loader:
         words = words.to(device)
         labels = labels.to(dtype=torch.long).to(device)
-        
+
         # Forward pass
         outputs = model(words)
         # if y would be one-hot, we must apply
         # labels = torch.max(labels, 1)[1]
         loss = criterion(outputs, labels)
-        
+
         # Backward and optimize
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        
-    if (epoch+1) % 100 == 0:
-        print (f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
 
+    if (epoch+1) % 100 == 0:
+        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
 
 print(f'final loss: {loss.item():.4f}')
 
 data = {
-"model_state": model.state_dict(),
-"input_size": input_size,
-"hidden_size": hidden_size,
-"output_size": output_size,
-"all_words": all_words,
-"tags": tags
+    "model_state": model.state_dict(),
+    "input_size": input_size,
+    "hidden_size": hidden_size,
+    "output_size": output_size,
+    "all_words": all_words,
+    "tags": tags
 }
 
 FILE = "data.pth"
